@@ -68,13 +68,13 @@ class Weapon:
 		self.weapons.append(attack.Attack("Katana", "Iron", "dex", 0.4, (("Bleed", 25)), 0.7, 1.5, ("Stamina", 4), ("Damage Output", "One Handed"), False))
 	
 	def initShields():
-		self.weapons.append(attack.Attack("Buckler", "Iron", "str", 0, (("Guard", 1.5)), 0, 3, ("Stamina", 25), ("Damage Blocked", "Shields"), False))
-		self.weapons.append(attack.Attack("Kite", "Iron", "str", 0, (("Guard", 1.75)), 0, 4, ("Stamina", 21), ("Damage Blocked", "Shields"), False))
-		self.weapons.append(attack.Attack("Heater", "Iron", "str", 0, (("Guard", 2)), 0, 4, ("Stamina", 21), ("Damage Blocked", "Shields"), False))
-		self.weapons.append(attack.Attack("Parma", "Iron", "str", 0, (("Guard", 2.5), ("Bash", "str", 0, 0.5)), 0, 5, ("Stamina", 18), ("Damage Blocked", "Shields"), False))
-		self.weapons.append(attack.Attack("Scutum", "Iron", "str", 0, (("Guard", 3), ("Bash", "str", 1.5, 3)), 0, 7, ("Stamina", 15), ("Damage Blocked", "Shields"), False))
-		self.weapons.append(attack.Attack("Spiked", "Iron", "str", 0, (("Guard", 2), ("Spikes", "str", 1.5)), 0, 6, ("Stamina", 20), ("Damage Blocked", "Shields"), False))
-		self.weapons.append(attack.Attack("Wall", "Iron", "str", 0, (("Guard", 2), ("Bash", "str", 5, 5)), 0, 10, ("Stamina", 9), ("Damage Blocked", "Shields"), False))
+		self.weapons.append(attack.Attack("Buckler", "Iron", "str", 1.5, None, 0, 3, ("Stamina", 25), ("Damage Blocked", "Shields"), False))
+		self.weapons.append(attack.Attack("Kite", "Iron", "str", 1.75, None, 0, 4, ("Stamina", 21), ("Damage Blocked", "Shields"), False))
+		self.weapons.append(attack.Attack("Heater", "Iron", "str", 2, None, 0, 4, ("Stamina", 21), ("Damage Blocked", "Shields"), False))
+		self.weapons.append(attack.Attack("Parma", "Iron", "str", 2.5, (("Bash", "str", 0, 0.5)), 0, 5, ("Stamina", 18), ("Damage Blocked", "Shields"), False))
+		self.weapons.append(attack.Attack("Scutum", "Iron", "str", 3, (("Bash", "str", 1.5, 3)), 0, 7, ("Stamina", 15), ("Damage Blocked", "Shields"), False))
+		self.weapons.append(attack.Attack("Spiked", "Iron", "str", 2, (("Spikes", "str", 1.5)), 0, 6, ("Stamina", 20), ("Damage Blocked", "Shields"), False))
+		self.weapons.append(attack.Attack("Wall", "Iron", "str", 2, (("Bash", "str", 5, 5)), 0, 10, ("Stamina", 9), ("Damage Blocked", "Shields"), False))
 	
 	def initStaffs():
 		self.weapons.append(attack.Attack("Bo", "Iron", "str", 0.2, (("Reach", 3)), 2, 3, ("Stamina", 15), ("Damage Output", "Staffs"), False))
@@ -95,10 +95,10 @@ class Weapon:
 		self.weapons.append(attack.Attack("Dotanuki", "Iron", "str", 1.7, (("Sweep"), ("Bleed", 40)), 3.5, 9, ("Stamina", 22), ("Damage Output", "Two Handed"), False))
 	
 	def initUnarmed():
-		self.weapons.append(attack.Attack("Gloves", "Iron", "dex", -0.5, ("Close Combat"), 0, 0, ("Stamina", 2), ("Damage Output", "Unarmed"), True))
-		self.weapons.append(attack.Attack("Brass Knuckles", "Iron", "dex", -0.3, (("Close Combat")), 0, 0.2, ("Stamina", 4), ("Damage Output", "Unarmed"), False))
-		self.weapons.append(attack.Attack("Cestus", "Iron", "dex", -0.2, (("Close Combat")), 0, 0.2, ("Stamina", 4), ("Damage Output", "Unarmed"), False))
-		self.weapons.append(attack.Attack("Gauntlets", "Iron", "dex", -0.1, (("Close Combat")), 0, 0.2, ("Stamina", 4), ("Damage Output", "Unarmed"), False))
-		self.weapons.append(attack.Attack("Spiked Knuckles", "Iron", "dex", 0, (("Close Combat"), ("Bleed", 5)), 0, 0.3, ("Stamina", 6), ("Damage Output", "Unarmed"), False))
-		self.weapons.append(attack.Attack("Push Dagger", "Iron", "dex", 0.2, (("Close Combat"), ("Bleed", 7)), 0, 0.3, ("Stamina", 6), ("Damage Output", "Unarmed"), False))
+		self.weapons.append(attack.Attack("Gloves", "Iron", "dex", -0.5, None, 0, 0, ("Stamina", 2), ("Damage Output", "Unarmed"), True))
+		self.weapons.append(attack.Attack("Brass Knuckles", "Iron", "dex", -0.3, None, 0, 0.2, ("Stamina", 4), ("Damage Output", "Unarmed"), False))
+		self.weapons.append(attack.Attack("Cestus", "Iron", "dex", -0.2, None, 0, 0.2, ("Stamina", 4), ("Damage Output", "Unarmed"), False))
+		self.weapons.append(attack.Attack("Gauntlets", "Iron", "dex", -0.1, None, 0, 0.2, ("Stamina", 4), ("Damage Output", "Unarmed"), False))
+		self.weapons.append(attack.Attack("Spiked Knuckles", "Iron", "dex", 0, (("Bleed", 5)), 0, 0.3, ("Stamina", 6), ("Damage Output", "Unarmed"), False))
+		self.weapons.append(attack.Attack("Push Dagger", "Iron", "dex", 0.2, (("Bleed", 7)), 0, 0.3, ("Stamina", 6), ("Damage Output", "Unarmed"), False))
 	

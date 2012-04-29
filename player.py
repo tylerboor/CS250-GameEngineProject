@@ -6,21 +6,50 @@ __date__ ="$Jan 9, 2012 10:14:59 AM$"
 
 import attributes
 
-class player:
+class Player:
 	# Class controls the player information
 	def __init__(self, startingClass):
 		self.player = attributes.Attributes(startingClass)
+		
 		
 	def skills(self):
 		return self.player.skills.activated()
 
 	def powers(self):
 		return self.player.powers.activated()
+		
+	def handleAttack(self, target, attack):
+		target.computeDamageTaken(self.player, attack) # Get damage return for skill/power leveling (to be added)
+		if target.HP = 0:
+			self.player.points = self.player.points + self.player.addXP(target.level)
+			# points can be used for leveling up
+			target.dead()
+	
+	def computeDamageTaken(self, enemy, attack):
+		if attack.Type == "Active Spell":
+			damage = enemy.getBasePowerDamage()*attack.modVal - self.player.getBaseDefenseVsMagic()
+		elif attack.Type != "Passive Spell":
+			if attack.modStat == "dex":
+				if defending:
+					damage = enemy.getBaseDexSkillDamage()*attack.modVal - self.player.getBaseDefenseVsPhysical()*self.shield.modVal
+					# Modify Shield level here (to be added)
+				else:
+					damage = enemy.getBaseDexSkillDamage()*attack.modVal - self.player.getBaseDefenseVsPhysical()
+			else:
+				if defending:
+					damage = enemy.getBaseStrSkillDamage()*attack.modVal - self.player.getBaseDefenseVsPhysical()*self.shield.modVal
+					# Modify Shield level here (to be added)
+				else:
+					damage = enemy.getBaseStrSkillDamage()*attack.modVal - self.player.getBaseDefenseVsPhysical()
+		if damage < 1:
+			damage = 1
+		if self.player.HP - damage < 1:
+			self.player.HP = 0
+		else:
+			self.player.HP = self.player.HP - damage
+		return damage
 
-	def computeDamageOutput(self, attack, associatedPerks):
-		None
-
-	def computeDamageInput(self, attack, associatedPerks):
+	def dead(self):
 		None
 
 	def getDefenseRating(self, against):
@@ -59,6 +88,6 @@ if __name__ == "__main__":
 	print "You may choose from the following list of classes for your starting class."
 	print "[Wytch, Thief, Warrior, Mage, Descendent, Assassin, Healer, Seer, Ranger, Wanderer]"
 	startingClass = raw_input("What Class would you like to be? ")
-	User = player(startingClass)
+	User = Player(startingClass)
 	User.printClassStats()
 	User.subPrimeDefinitions()

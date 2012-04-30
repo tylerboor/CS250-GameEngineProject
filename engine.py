@@ -23,6 +23,15 @@ black = (0, 0, 0)
 white = (255, 255, 255)
 sand = (255, 230, 160)
 
+# Enemy entity class
+class enemy(pygame.sprite.Sprite):
+    def __init__(self, type, width, height):
+        self.player = attributes.Attributes(startingClass)
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface([width, height])
+        self.image.fill((0,0,225))    # Change this to an image animation loop later
+        self.rect = self.image.get_rect()
+
 class engine:
     def __init__(self):
         # Initialize the game engine
@@ -40,11 +49,6 @@ class engine:
         self.clock = self.pygame.time.Clock()
         # Setting the frame rate
         self.clock.tick(25)
-
-        # Initialize the player entity
-        self.player = Player(black, 30, 30)
-        self.player.rect.x = 385
-        self.player.rect.y = 285
 
         # This is a list of 'sprites.' Each entity in the program is
         # added to this list.
@@ -72,6 +76,12 @@ class engine:
 
             # Draw initial testing environment
             self.pygame.draw.rect(self.screen,sand,[20,20,760,560],0)
+            
+            # Initialize test enemy
+            self.player = player.Player("Wanderer", 30, 30)
+            self.all_sprites_list.add(self.player) # Add the player to the list of objects
+            self.player.rect.x = 385
+            self.player.rect.y = 285
             
             # Listen for keyboard events				
             for event in self.pygame.event.get():

@@ -42,7 +42,7 @@ class engine:
         self.clock.tick(25)
 
         # Initialize the player entity
-        self.player = Player(black, 30, 30)
+        self.player = player.Player(black, 30, 30)
         self.player.rect.x = 385
         self.player.rect.y = 285
 

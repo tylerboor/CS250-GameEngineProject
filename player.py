@@ -11,7 +11,7 @@ import pygame
 class Player(pygame.sprite.Sprite):
 	# Class controls the player information
 	def __init__(self, startingClass, width, height):
-		self.player = attributes.Attributes(startingClass)
+		self.player = attributes.Attributes("Wanderer")
 		pygame.sprite.Sprite.__init__(self)
 		self.image = pygame.Surface([width, height])
 		self.image.fill((0,0,0))    # Change this to an image animation loop later

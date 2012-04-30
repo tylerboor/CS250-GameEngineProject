@@ -35,6 +35,11 @@ class Attributes:
 		self.EquiptBurden = self.getBaseEquiptBurden()
 		self.MP = self.getBaseMP()
 		
+	def addHP(self, amount):
+		self.HP = self.HP + amount
+		if self.HP > self.getBaseHP():
+			self.HP = self.getBaseHP()
+
 	def addXP(self, amount):
 		self.currentXP = self.currentXP + amount
 		levels = 0

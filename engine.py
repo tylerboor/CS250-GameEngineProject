@@ -22,6 +22,7 @@ import time
 # ----- Global variables -----
 # Color variables
 blue = (0, 0, 255)
+red = (255, 0, 0)
 black = (0, 0, 0)
 white = (255, 255, 255)
 sand = (255, 230, 160)
@@ -50,13 +51,34 @@ class engine:
         # All entities.
         self.all_sprites_list = self.pygame.sprite.RenderPlain()
         
+    def gameOver(self):
+        while True:
+            titleFont = self.pygame.font.Font(None, 80)
+            gameOver = titleFont.render("Game Over",True,red)
+            self.screen.blit(gameOver, [240,200])
+            
+            # Draw character				
+            self.all_sprites_list.draw(self.screen)
+            
+            # Listen for keyboard events
+            for event in self.pygame.event.get():
+                if event.type == self.pygame.KEYDOWN:
+                    if event.key == self.pygame.K_RETURN or event.key == self.pygame.K_ESCAPE or event.key == self.pygame.K_BACKSPACE:
+                        self.mainMenu()
+
+            # Update the screen with what we've drawn.
+            self.pygame.display.flip()
+            self.pygame.event.pump()     
+        
     def handleAttack(self, attacker, target, attack):
         targetHealth = self.computeDamageTaken(attacker, target, attack) # Get damage return for skill/power leveling (to be added)
         if targetHealth == 0:
             #attacker.points = attacker.points + self.player.addXP(target.level)
             # points can be used for leveling up
-            print "got here?"
             target.remove(self.all_sprites_list)
+            if target is self.player:
+                self.gameOver()
+
 	
     def computeDamageTaken(self, attacker, target, attack):
         defending = False
@@ -108,7 +130,7 @@ class engine:
             # Mouse position for debugging
             mouseCoordinates = self.pygame.mouse.get_pos()
             mouseFont = self.pygame.font.Font(None, 14)
-            mousePos = mouseFont.render(("MOUSE_POS = (%d,%d)" % mouseCoordinates),True,black)
+            mousePos = mouseFont.render(("MOUSE_POS = (%d,%d)" % mouseCoordinates),True,white)
             self.screen.blit(mousePos, [10,10])
             
             # Draw health stats
@@ -131,7 +153,6 @@ class engine:
                 else:
                     enemyDirection = "UP"
             speedCounter += 1
-            
             if speedCounter > 15:
                 speedCounter = 0
             
@@ -196,14 +217,15 @@ class engine:
             
             # instructions for choosing a class
             instructFont = self.pygame.font.Font(None, 20)
-            instructions = instructFont.render("Arrow keys to choose, enter to select",True,black)
-            self.screen.blit(instructions, [280,480])
+            instructions = instructFont.render("Arrow keys to choose, enter to select (to be implemented)",True,black)
+            self.screen.blit(instructions, [260,480])
             
             # Draw options
             optionFont = self.pygame.font.Font(None, 40)
             optionText = optionFont.render("Wanderer",True,black)
             self.screen.blit(optionText, [330,300])
-            
+      
+      
             # Listen for keyboard events
             for event in self.pygame.event.get():
                 if event.type == self.pygame.KEYDOWN:
@@ -261,6 +283,12 @@ class engine:
         # Initialize coordinate variables for the shield
         shieldX = 290
         shieldY = 190
+        
+        # Reset entities if there are any
+        for entity in self.all_sprites_list:
+            self.all_sprites_list.remove(entity)
+        for entity in self.enemy_list:
+            self.enemy_list.remove(entity)
         
         while True:
             # Draw background

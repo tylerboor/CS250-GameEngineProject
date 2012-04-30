@@ -23,14 +23,6 @@ black = (0, 0, 0)
 white = (255, 255, 255)
 sand = (255, 230, 160)
 
-class Player(pygame.sprite.Sprite):
-	# Initialize the player sprite
-	def __init__(self, color, width, height):
-		pygame.sprite.Sprite.__init__(self)
-		self.image = pygame.Surface([width, height])
-		self.image.fill(black)
-		self.rect = self.image.get_rect()
-
 class engine:
     def __init__(self):
         # Initialize the game engine

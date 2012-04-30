@@ -6,11 +6,16 @@ __date__ ="$Jan 9, 2012 10:14:59 AM$"
 
 import attributes
 
-class Player:
+import pygame
+
+class Player(pygame.sprite.Sprite):
 	# Class controls the player information
-	def __init__(self, startingClass):
+	def __init__(self, startingClass, width, height):
 		self.player = attributes.Attributes(startingClass)
-		
+		pygame.sprite.Sprite.__init__(self)
+		self.image = pygame.Surface([width, height])
+		self.image.fill((0,0,0))    # Change this to an image animation loop later
+		self.rect = self.image.get_rect()
 		
 	def skills(self):
 		return self.player.skills.activated()
@@ -20,7 +25,7 @@ class Player:
 		
 	def handleAttack(self, target, attack):
 		target.computeDamageTaken(self.player, attack) # Get damage return for skill/power leveling (to be added)
-		if target.HP = 0:
+		if target.HP == 0:
 			self.player.points = self.player.points + self.player.addXP(target.level)
 			# points can be used for leveling up
 			target.dead()

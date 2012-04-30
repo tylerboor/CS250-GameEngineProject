@@ -148,7 +148,7 @@ class engine:
                 if event.type == self.pygame.KEYDOWN:
                     if event.key == self.pygame.K_RETURN:
                         # Initialize the player entity
-                        self.player = player.player("Wanderer", 30, 30)
+                        self.player = player.Player("Wanderer", 30, 30)
                         self.all_sprites_list.add(self.player) # Add the player to the list of objects
                         self.player.rect.x = 385
                         self.player.rect.y = 285

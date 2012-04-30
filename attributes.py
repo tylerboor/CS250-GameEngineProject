@@ -22,20 +22,41 @@ class Attributes:
 		self.strength = values[6] # Staff, Two-Handed, and shield damage/defense control
 		self.agility = values[7] # Dodge likelihood control
 		self.luck = values[8] # Critical hit likelihood control
+		self.initializeStatus()
+		self.level = 1
+		self.currentXP = 0
+		self.XPtoNextLevel = 10
+		self.points = 0 # Used for adding to different stats (and a new skill or power but this is unimplemented)
 
-	def getHP(self):
+	def initializeStatus(self):
+		self.HP = self.getBaseHP()
+		self.VP = self.getBaseVP()
+		self.Stamina = self.getBaseStamina()
+		self.EquiptBurden = self.getBaseEquiptBurden()
+		self.MP = self.getBaseMP()
+		
+	def addXP(self, amount):
+		self.currentXP = self.currentXP + amount
+		levels = 0
+		while self.currentXP > self.XPtoNextLevel:
+			self.currentXP = self.currentXP - self.XPtoNextLevel
+			self.XPtoNextLevel = int(self.XPtoNextLevel * 0.2)
+			levels = levels + 1
+		return levels
+	
+	def getBaseHP(self):
 		return 100 + (self.vitality * 10)
 
-	def getVP(self):
+	def getBaseVP(self):
 		return 25 + (self.vitavis * 5)
 
-	def getStamina(self):
+	def getBaseStamina(self):
 		return 50 + (self.endurance * 7)
 
-	def getEquiptBurden(self):
+	def getBaseEquiptBurden(self):
 		return 30 + (self.endurance * 3)
 
-	def getMP(self):
+	def getBaseMP(self):
 		return self.madness * 10
 
 	def getBasePowerDamage(self):

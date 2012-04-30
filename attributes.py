@@ -63,7 +63,7 @@ class Attributes:
 		return self.intellegnece
 
 	def getBaseDexSkillDamage(self):
-		return self.dexterity
+		return self.dexterity * 10
 
 	def getBaseStrSkillDamage(self):
 		return self.strength

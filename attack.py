@@ -9,7 +9,7 @@ import weapons
 import spells
 
 class Attack:
-	def __init__(self, name, Type, modStat, modVal, auxEffects, cooldown, weight. cost, leveling, status):
+	def __init__(self, name, Type, modStat, modVal, auxEffects, cooldown, weight, cost, leveling, status):
 		self.name = name # Name of either a weapon or a spell
 		self.Type = Type # Signifies whether it is a weapon or a spell
 		self.modStat = modStat # Signifies which stat it modifies with

@@ -12,8 +12,9 @@ pygame.init()
 
 # ----- Other libraries we wrote
 import player
-#import weapons
-#import spells
+import weapons
+import spells
+import attack
 
 # ----- Import other libraries -----
 import time
@@ -48,6 +49,39 @@ class engine:
         # This is a list of every sprite.
         # All entities.
         self.all_sprites_list = self.pygame.sprite.RenderPlain()
+        
+    def handleAttack(self, attacker, target, attack):
+        targetHealth = self.computeDamageTaken(attacker, target, attack) # Get damage return for skill/power leveling (to be added)
+        if targetHealth == 0:
+            #attacker.points = attacker.points + self.player.addXP(target.level)
+            # points can be used for leveling up
+            print "got here?"
+            target.remove(self.all_sprites_list)
+	
+    def computeDamageTaken(self, attacker, target, attack):
+        defending = False
+        if attack.Type == "Active Spell":
+            damage = attacker.player.getBasePowerDamage()*attack.modVal - target.player.getBaseDefenseVsMagic()
+        elif attack.Type != "Passive Spell":
+            if attack.modStat == "dex":
+                if defending:
+                    damage = attacker.player.getBaseDexSkillDamage()*attack.modVal - target.player.getBaseDefenseVsPhysical()*target.player.shield.modVal
+                    # Modify Shield level here (to be added)
+                else:
+                    damage = attacker.player.getBaseDexSkillDamage()*attack.modVal - target.player.getBaseDefenseVsPhysical()
+            else:
+                if defending:
+                    damage = attacker.player.getBaseStrSkillDamage()*attack.modVal - target.player.getBaseDefenseVsPhysical()*target.player.shield.modVal
+                    # Modify Shield level here (to be added)
+                else:
+                    damage = attacker.player.getBaseStrSkillDamage()*attack.modVal - target.player.getBaseDefenseVsPhysical()
+        if damage < 1:
+            damage = 1
+        if target.player.HP - damage < 1:
+            target.player.HP = 0
+        else:
+            target.player.HP = target.player.HP - damage
+        return target.player.HP
     
     def environment(self):
         # Allow buttons to be held down
@@ -77,14 +111,23 @@ class engine:
             mousePos = mouseFont.render(("MOUSE_POS = (%d,%d)" % mouseCoordinates),True,black)
             self.screen.blit(mousePos, [10,10])
             
+            # Draw health stats
+            entityFont = self.pygame.font.Font(None, 20)
+            playerHealth = ("Health: " + str(self.player.player.HP))
+            playerHealthText = entityFont.render(playerHealth,True,black)
+            self.screen.blit(playerHealthText, [50,50])
+            enemyHealth = ("Enemy Health: " + str(self.enemy.player.HP))
+            enemyHealthText = entityFont.render(enemyHealth,True,black)
+            self.screen.blit(enemyHealthText, [50,550])
+            
             if enemyDirection == "UP" and speedCounter % 15 == 0:
                 if self.enemy.rect.y > 100:
-                    self.enemy.rect.y = self.enemy.rect.y - 1
+                    self.enemy.update("UP", 1)
                 else:
                     enemyDirection = "DOWN"
             elif enemyDirection == "DOWN" and speedCounter % 15 == 0:
                 if self.enemy.rect.y < 500:
-                    self.enemy.rect.y = self.enemy.rect.y + 1
+                    self.enemy.update("DOWN", 1)
                 else:
                     enemyDirection = "UP"
             speedCounter += 1
@@ -97,13 +140,13 @@ class engine:
                 if event.type == self.pygame.KEYDOWN:
                     # Movement keys
                     if event.key == self.pygame.K_UP and self.player.rect.y > 20:
-                        self.player.rect.y = self.player.rect.y - 5
+                        self.player.update("UP", 5)
                     if event.key == self.pygame.K_DOWN and self.player.rect.y < 540:
-                        self.player.rect.y = self.player.rect.y + 5
+                        self.player.update("DOWN", 5)
                     if event.key == self.pygame.K_LEFT and self.player.rect.x > 20:
-                        self.player.rect.x = self.player.rect.x - 5
+                        self.player.update("LEFT", 5)
                     if event.key == self.pygame.K_RIGHT and self.player.rect.x < 755:
-                        self.player.rect.x = self.player.rect.x + 5
+                        self.player.update("RIGHT", 5)
                         
                     # Action keys
                     if event.key == self.pygame.K_SPACE:
@@ -120,6 +163,13 @@ class engine:
                         self.mainMenu()
                 elif event.type == self.pygame.KEYUP:
                     continue
+                    
+            # Check for collisions
+            collision_list = pygame.sprite.spritecollide(self.player, self.enemy_list, False) 
+            if len(collision_list) > 0:
+                self.handleAttack(self.enemy, self.player, self.enemy.weapons.weapons[5])
+                #self.enemy.handleAttack(self.player, self.enemy.weapons.weapons[5])
+            
             # Draw character				
             self.all_sprites_list.draw(self.screen)
 

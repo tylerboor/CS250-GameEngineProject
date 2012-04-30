@@ -5,17 +5,71 @@ __author__="rosbaldeston"
 __date__ ="$Jan 9, 2012 10:14:59 AM$"
 
 import attributes
+import weapons
+import attack
 
 import pygame
+pygame.display.set_mode([800,600])
+# ----- image variables -----
+playerUpImg = pygame.image.load("images/player-UP.png").convert()
+playerDownImg = pygame.image.load("images/player-DOWN.png").convert()
+playerLeftImg = pygame.image.load("images/player-LEFT.png").convert()
+playerRightImg = pygame.image.load("images/player-RIGHT.png").convert()
+enemyUpImg = pygame.image.load("images/enemy-UP.png").convert()
+enemyDownImg = pygame.image.load("images/enemy-DOWN.png").convert()
+enemyLeftImg = pygame.image.load("images/enemy-LEFT.png").convert()
+enemyRightImg = pygame.image.load("images/enemy-RIGHT.png").convert()
+playerUpImg.set_colorkey((255,255,255))
+playerDownImg.set_colorkey((255,255,255))
+playerLeftImg.set_colorkey((255,255,255))
+playerRightImg.set_colorkey((255,255,255))
+enemyUpImg.set_colorkey((255,255,255))
+enemyDownImg.set_colorkey((255,255,255))
+enemyLeftImg.set_colorkey((255,255,255))
+enemyRightImg.set_colorkey((255,255,255))
+
 
 class Player(pygame.sprite.Sprite):
 	# Class controls the player information
-	def __init__(self, startingClass, width, height):
-		self.player = attributes.Attributes(startingClass)
-		pygame.sprite.Sprite.__init__(self)
-		self.image = pygame.Surface([width, height])
-		self.image.fill((0,0,0))    # Change this to an image animation loop later
-		self.rect = self.image.get_rect()
+    def __init__(self, startingClass, type, width, height):
+        self.player = attributes.Attributes(startingClass)
+        pygame.sprite.Sprite.__init__(self)
+        self.type = startingClass
+        if startingClass == "Wanderer":
+            self.image = playerDownImg
+        elif startingClass == "Wytch":
+            self.image = enemyDownImg
+        self.rect = self.image.get_rect()
+        
+        # Initialize player weapons
+        self.weapons = weapons.Weapon()
+        
+    def update(self, direction, speed):
+        if direction == "UP":
+            if self.type == "Wanderer":
+                self.image = playerUpImg
+            if self.type == "Wytch":
+                self.image = enemyUpImg
+            self.rect.y -= speed
+        if direction == "DOWN":
+            if self.type == "Wanderer":
+                self.image = playerDownImg
+            if self.type == "Wytch":
+                self.image = enemyDownImg
+            self.rect.y += speed
+        if direction == "LEFT":
+            if self.type == "Wanderer":
+                self.image = playerLeftImg
+            if self.type == "Wytch":
+                self.image = enemyLeftImg
+            self.rect.x -= speed
+        if direction == "RIGHT":
+            if self.type == "Wanderer":
+                self.image = playerRightImg
+            if self.type == "Wytch":
+                self.image = enemyRightImg
+            self.rect.x += speed
+        
 		
 	def skills(self):
 		return self.player.skills.activated()

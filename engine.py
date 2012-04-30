@@ -72,12 +72,14 @@ class engine:
         
     def handleAttack(self, attacker, target, attack):
         targetHealth = self.computeDamageTaken(attacker, target, attack) # Get damage return for skill/power leveling (to be added)
-        if targetHealth == 0:
+        if targetHealth < 1:
             #attacker.points = attacker.points + self.player.addXP(target.level)
             # points can be used for leveling up
             target.remove(self.all_sprites_list)
-            if target is self.player:
+            if target.type == "Wanderer":
                 self.gameOver()
+            if target.type == "Wytch":
+                target.remove(self.enemy_list)
 
 	
     def computeDamageTaken(self, attacker, target, attack):
@@ -189,6 +191,7 @@ class engine:
             collision_list = pygame.sprite.spritecollide(self.player, self.enemy_list, False) 
             if len(collision_list) > 0:
                 self.handleAttack(self.enemy, self.player, self.enemy.weapons.weapons[5])
+                self.handleAttack(self.player, self.enemy, self.player.weapons.weapons[5])
                 #self.enemy.handleAttack(self.player, self.enemy.weapons.weapons[5])
             
             # Draw character				

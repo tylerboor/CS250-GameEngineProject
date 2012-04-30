@@ -27,6 +27,26 @@ black = (0, 0, 0)
 white = (255, 255, 255)
 sand = (255, 230, 160)
 
+# Image variables
+healthImg = pygame.image.load("images/small-check.png").convert()
+healthImg.set_colorkey((255,255,255))
+keyImg = pygame.image.load("images/key.png").convert()
+keyImg.set_colorkey((255,255,255))
+chestImg = pygame.image.load("images/chest.png").convert()
+chestImg.set_colorkey((255,255,255))
+
+class Item(pygame.sprite.Sprite):
+    def __init__ (self, type):
+        pygame.sprite.Sprite.__init__(self)
+        self.type = type
+        if type == "health":
+            self.image = healthImg
+        if type == "chest":
+            self.image = chestImg
+        if type == "key":
+            self.image = keyImg
+        self.rect = self.image.get_rect()
+
 class engine:
     def __init__(self):
         # Initialize the game engine
@@ -50,6 +70,9 @@ class engine:
         # This is a list of every sprite.
         # All entities.
         self.all_sprites_list = self.pygame.sprite.RenderPlain()
+        
+        # Sprite list for items
+        self.item_sprite_list = self.pygame.sprite.RenderPlain()
         
     def gameOver(self):
         while True:
@@ -111,15 +134,43 @@ class engine:
         # Allow buttons to be held down
         self.pygame.key.set_repeat(1, 25)
         
-        # Initialize test enemy
-        enemyImage = "images/player-DOWN.png"
-        self.enemy = player.Player("Wytch", enemyImage, 30, 30)
-        self.all_sprites_list.add(self.enemy)   # Add the enemy to the list of objects
-        self.enemy_list.add(self.enemy)         # Add the enemy to the list of enemies
-        self.enemy.rect.x = 200
-        self.enemy.rect.y = 200
-        enemyDirection = "UP"
+        # Initialize test enemies
+        enemy1Image = "images/player-DOWN.png"
+        enemy2Image = "images/player-LEFT.png"
+        self.enemy1 = player.Player("Wytch", enemy1Image, 30, 30)
+        self.enemy2 = player.Player("Wytch", enemy2Image, 30, 30)
+        self.all_sprites_list.add(self.enemy1)   # Add the enemy to the list of objects
+        self.all_sprites_list.add(self.enemy2)
+        self.enemy_list.add(self.enemy1)         # Add the enemy to the list of enemies
+        self.enemy_list.add(self.enemy2)
+        self.enemy1.rect.x = 200
+        self.enemy1.rect.y = 200
+        self.enemy2.rect.x = 600
+        self.enemy2.rect.y = 500
+        enemy1Direction = "UP"
+        enemy2Direction = "LEFT"
         speedCounter = 0
+        
+        # Initial test items
+        self.health = Item("health")
+        self.item_sprite_list.add(self.health)
+        self.health.rect.x = 600
+        self.health.rect.y = 200
+        self.health2 = Item("health")
+        self.item_sprite_list.add(self.health2)
+        self.health2.rect.x = 500
+        self.health2.rect.y = 100
+        self.health3 = Item("health")
+        self.item_sprite_list.add(self.health3)
+        self.health3.rect.x = 600
+        self.health3.rect.y = 100
+        self.chest = Item("chest")
+        self.item_sprite_list.add(self.chest)
+        self.chest.rect.x = 300
+        self.chest.rect.y = 400
+        self.key = Item("key")
+        self.key.rect.x = 340
+        self.key.rect.y = 400
         
         while True:            
             # Draw background
@@ -140,20 +191,35 @@ class engine:
             playerHealth = ("Health: " + str(self.player.player.HP))
             playerHealthText = entityFont.render(playerHealth,True,black)
             self.screen.blit(playerHealthText, [50,50])
-            enemyHealth = ("Enemy Health: " + str(self.enemy.player.HP))
-            enemyHealthText = entityFont.render(enemyHealth,True,black)
-            self.screen.blit(enemyHealthText, [50,550])
+            enemy1Health = ("Enemy 1 Health: " + str(self.enemy1.player.HP))
+            enemy1HealthText = entityFont.render(enemy1Health,True,black)
+            self.screen.blit(enemy1HealthText, [50,550])
+            enemy2Health = ("Enemy 2 Health: " + str(self.enemy2.player.HP))
+            enemy2HealthText = entityFont.render(enemy2Health,True,black)
+            self.screen.blit(enemy2HealthText, [50,560])
             
-            if enemyDirection == "UP" and speedCounter % 15 == 0:
-                if self.enemy.rect.y > 100:
-                    self.enemy.update("UP", 1)
+            # Enemy 1 animation
+            if enemy1Direction == "UP" and speedCounter % 15 == 0:
+                if self.enemy1.rect.y > 100:
+                    self.enemy1.update("UP", 1)
                 else:
-                    enemyDirection = "DOWN"
-            elif enemyDirection == "DOWN" and speedCounter % 15 == 0:
-                if self.enemy.rect.y < 500:
-                    self.enemy.update("DOWN", 1)
+                    enemy1Direction = "DOWN"
+            elif enemy1Direction == "DOWN" and speedCounter % 15 == 0:
+                if self.enemy1.rect.y < 500:
+                    self.enemy1.update("DOWN", 1)
                 else:
-                    enemyDirection = "UP"
+                    enemy1Direction = "UP"
+            # Enemy 2 animation
+            if enemy2Direction == "LEFT" and speedCounter % 15 == 0:
+                if self.enemy2.rect.x > 100:
+                    self.enemy2.update("LEFT", 1)
+                else:
+                    enemy2Direction = "RIGHT"
+            elif enemy2Direction == "RIGHT" and speedCounter % 15 == 0:
+                if self.enemy2.rect.x < 550:
+                    self.enemy2.update("RIGHT", 1)
+                else:
+                    enemy2Direction = "LEFT"
             speedCounter += 1
             if speedCounter > 15:
                 speedCounter = 0
@@ -188,11 +254,26 @@ class engine:
                     continue
                     
             # Check for collisions
-            collision_list = pygame.sprite.spritecollide(self.player, self.enemy_list, False) 
-            if len(collision_list) > 0:
-                self.handleAttack(self.enemy, self.player, self.enemy.weapons.weapons[5])
-                self.handleAttack(self.player, self.enemy, self.player.weapons.weapons[5])
-                #self.enemy.handleAttack(self.player, self.enemy.weapons.weapons[5])
+            enemyCollision = pygame.sprite.spritecollide(self.player, self.enemy_list, False) 
+            if len(enemyCollision) > 0:
+                for sprite in enemyCollision:
+                    self.handleAttack(sprite, self.player, sprite.weapons.weapons[5])
+                    self.handleAttack(self.player, sprite, self.player.weapons.weapons[5])
+            itemCollision = pygame.sprite.spritecollide(self.player, self.item_sprite_list, False)
+            if len(itemCollision) > 0:
+                for item in itemCollision:
+                    if item.type == "health":
+                        self.player.player.addHP(80)
+                        item.remove(self.item_sprite_list)
+                    if item.type == "chest":
+                        for event in self.pygame.event.get():
+                            if event.key == self.pygame.K_SPACE:
+                                self.item_sprite_list.add(self.key)
+                    if item.type == "key":
+                        item.remove(self.item_sprite_list)
+            
+            # Draw items
+            self.item_sprite_list.draw(self.screen)
             
             # Draw character				
             self.all_sprites_list.draw(self.screen)

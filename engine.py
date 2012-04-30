@@ -1,13 +1,17 @@
 ############################################################
-# Author:		Tyler Boraski
-# Date:			3/28
-# Class:		CS 250 - Software Engineering
-# Assignment:	Project
-# Description	This file runs the game's graphical engine.
+# Author:				Tyler Boraski
+# Date:				3/28
+# Class:				CS 250 - Software Engineering
+# Assignment:		Project
+# Description:		This file runs the game's graphical engine.
 ############################################################
 
-# ----- Import the pygame library -----
+# ----- Import the self.pygame library and initialize it -----
 import pygame
+pygame.init()
+
+# ----- Other libraries we wrote
+import player
 
 # ----- Import other libraries -----
 import time
@@ -19,7 +23,6 @@ black = (0, 0, 0)
 white = (255, 255, 255)
 sand = (255, 230, 160)
 
-
 class Player(pygame.sprite.Sprite):
 	# Initialize the player sprite
 	def __init__(self, color, width, height):
@@ -29,202 +32,227 @@ class Player(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 
 class engine:
-	def main():
-		# Initialize the game engine
-		pygame.init()
+    def __init__(self):
+        # Initialize the game engine
+        self.pygame = pygame
 
-		# Set the screen size, and open a window with a title
-		size = [800,600]
-		screen = pygame.display.set_mode(size)
-		pygame.display.set_caption("CS250 Project - Tyler Boraski & Ryan Osbaldeston")
-		
-		# Allow buttons to be held down
-		pygame.key.set_repeat(1, 50)
-		
-		# Loop until the user clicks the close button
-		done = False
-		
-		# Initialize object that sets the screen's frame rate
-		clock = pygame.time.Clock()
-		
-		# Initialize coordinate variables for the shield
-		shieldX = 290
-		shieldY = 190
-		
-		# Initialize game state
-		# 0 = The game is at the main menu
-		# 1 = The game is being played
-		gameState = 0
-		
-		# Setup option variables to handle selecting options on main menu
-		optionNum = 1
-		
-		# Instruction page variable
-		instructPage = False
-		
-		# Image variables
-		shield = pygame.image.load("images/Shield.png")
-		
-		# Initialize the player entity
-		player = Player(black, 30, 30)
-		player.rect.x = 385
-		player.rect.y = 285
-		
-		# This is a list of 'sprites.' Each entity in the program is
-		# added to this list.
-		# The list is managed by a class called 'RenderPlain.'
-		enemy_list = pygame.sprite.RenderPlain()
-		
-		# This is a list of every sprite.
-		# All entities.
-		all_sprites_list = pygame.sprite.RenderPlain()
-		
-		# Add the player to the list of objects
-		all_sprites_list.add(player)
-		
-		
-		
-		# ----- Main Program Loop -----
-		while done == False:
-			for event in pygame.event.get():
-				if event.type == pygame.QUIT:
-					done = True
-			
-			# Setting the frame rate
-			clock.tick(60)
-			
-			# Draw the position of the mouse for debugging and such
-			mouseCoordinates = pygame.mouse.get_pos()
-			mouseFont = pygame.font.Font(None, 14)
-			mousePos = mouseFont.render(("MOUSE_POS = (%d,%d)" % mouseCoordinates),True,black)
-			
-			# Handle the game states
-			if gameState == 0:
-			
-				# ----- Menu -----
-				
-				# Draw background
-				screen.fill(blue)
-				pygame.draw.rect(screen,black,[100,100,600,400],2)
-				
-				# Mouse position for debugging
-				mousePos = mouseFont.render(("MOUSE_POS = (%d,%d)" % mouseCoordinates),True,black)
-				screen.blit(mousePos, [10,10]) 
-				
-				# Main menu
-				if instructPage == False:
-					# Draw background
-					titleFont = pygame.font.Font(None, 60)
-					titleFont.set_underline(True)
-					title = titleFont.render("Tyler and Ryan's Game",True,black)
-					screen.blit(title, [160,130])
-					optionFont = pygame.font.Font(None, 40)
-					option1text = optionFont.render("New Game",True,black)
-					option2text = optionFont.render("Instructions",True,black)
-					option3text = optionFont.render("Exit",True,black)
-					screen.blit(option1text, [380,220])
-					screen.blit(option2text, [380,300])
-					screen.blit(option3text, [380,380])
-				
-					# Draw shield				
-					shieldPos = [shieldX, shieldY]
-					screen.blit(shield, shieldPos)
-					
-					# Listen for keyboard events
-					for event in pygame.event.get():
-						# Moving the shield icon with UP and DOWN arrow keys
-						if event.type == pygame.KEYDOWN:
-							if event.key == pygame.K_UP and shieldY > 190:
-								shieldY = shieldY - 80
-								optionNum = optionNum - 1
-							if event.key == pygame.K_DOWN and shieldY < 350:
-								shieldY = shieldY + 80
-								optionNum = optionNum + 1
-							# Pressing ENTER to select and option
-							if event.key == pygame.K_RETURN:
-								if optionNum == 1:
-									gameState = 1
-								elif optionNum == 2:
-									instructPage = True
-								elif optionNum == 3:
-									pygame.quit()
-									exit()
-				# Instruction screen
-				else:
-					# Draw background
-					instructFont = pygame.font.Font(None, 60)
-					instructFont.set_underline(True)
-					instructTitle = instructFont.render("Instructions",True,black)
-					screen.blit(instructTitle, [270,130])
-					bodyFont = pygame.font.Font(None, 20)
-					body = bodyFont.render("Insert all instructions here",True,black)
-					screen.blit(body, [120,200])				
-					
-					# Listen for keyboard events
-					for event in pygame.event.get():
-						if event.type == pygame.KEYDOWN:
-							if event.key == pygame.K_RETURN or event.key == pygame.K_ESCAPE or event.key == pygame.K_BACKSPACE:
-								instructPage = False
-					
-			elif gameState == 1:
-			
-				# ----- Game Environment -----
-				
-				# Draw background
-				screen.fill(white)
-				pygame.draw.rect(screen,black,[5,5,790,590],0)
-				
-				# Mouse position for debugging
-				mousePos = mouseFont.render(("MOUSE_POS = (%d,%d)" % mouseCoordinates),True,white)
-				screen.blit(mousePos, [10,10])
-				
-				# Draw initial testing environment
-				pygame.draw.rect(screen,sand,[20,20,760,560],0)
-				
-				# Listen for keyboard events				
-				for event in pygame.event.get():
-					if event.type == pygame.KEYDOWN:
-						# Movement keys
-						if event.key == pygame.K_UP and player.rect.y > 0 and player.rect.y < 570:
-							player.rect.y = player.rect.y - 5
-						if event.key == pygame.K_DOWN and player.rect.y > 0 and player.rect.y < 570:
-							player.rect.y = player.rect.y + 5
-						if event.key == pygame.K_LEFT and player.rect.x > 0 and player.rect.x < 770:
-							player.rect.x = player.rect.x - 5
-						if event.key == pygame.K_RIGHT and player.rect.x > 0 and player.rect.x < 770:
-							player.rect.x = player.rect.x + 5
-							
-						# Action keys
-						if event.key == pygame.K_SPACE:
-							# actionHandler needs to be implemented
-							
-						# Inveory key 
-						if event.key == pygame.K_i:
-							# inventoryHandler needs to be implemented which includes spells as well
-							
-						# Escape key back to the main menu
-						if event.key == pygame.K_ESCAPE:
-							gameState = 0
-					elif event.type == pygame.KEYUP:
-						continue
-				# Draw character				
-				all_sprites_list.draw(screen)
-			
-			# Update the screen with what we've drawn.
-			pygame.display.flip()
-			pygame.event.pump()			
-			
-		# Exit the game
-		print "Got HEREERERE"
-		pygame.quit()
+        # Set the screen size, and open a window with a title
+        size = [800,600]
+        self.screen = self.pygame.display.set_mode(size)
+        self.pygame.display.set_caption("CS250 Project - Tyler Boraski & Ryan Osbaldeston")
 
-	if __name__ == "__main__":
-		main()
-		
-class Player(pygame.sprite.Sprite):
-	# Initialize the player sprite
-	def __init__(self, color, width, height):
-		pygame.sprite.Sprite.__init__(self)
-		self.image = pygame.Surface([width, height])
-		self.image.fill(black)
-		self.rect = self.image.get_rect()
+        # Allow buttons to be held down
+        #self.pygame.key.set_repeat(1, 50)
+
+        # Initialize object that sets the screen's frame rate
+        self.clock = self.pygame.time.Clock()
+        # Setting the frame rate
+        self.clock.tick(25)
+
+        # Initialize the player entity
+        self.player = Player(black, 30, 30)
+        self.player.rect.x = 385
+        self.player.rect.y = 285
+
+        # This is a list of 'sprites.' Each entity in the program is
+        # added to this list.
+        # The list is managed by a class called 'RenderPlain.'
+        self.enemy_list = self.pygame.sprite.RenderPlain()
+
+        # This is a list of every sprite.
+        # All entities.
+        self.all_sprites_list = self.pygame.sprite.RenderPlain()
+    
+    def environment(self):
+        # Allow buttons to be held down
+        self.pygame.key.set_repeat(1, 50)
+        
+        while True:            
+            # Draw background
+            self.screen.fill(white)
+            self.pygame.draw.rect(self.screen,black,[5,5,790,590],0)
+            
+            # Mouse position for debugging
+            mouseCoordinates = self.pygame.mouse.get_pos()
+            mouseFont = self.pygame.font.Font(None, 14)
+            mousePos = mouseFont.render(("MOUSE_POS = (%d,%d)" % mouseCoordinates),True,black)
+            self.screen.blit(mousePos, [10,10])
+
+            # Draw initial testing environment
+            self.pygame.draw.rect(self.screen,sand,[20,20,760,560],0)
+            
+            # Listen for keyboard events				
+            for event in self.pygame.event.get():
+                if event.type == self.pygame.KEYDOWN:
+                    # Movement keys
+                    if event.key == self.pygame.K_UP and self.player.rect.y > 0 and self.player.rect.y < 570:
+                        self.player.rect.y = self.player.rect.y - 5
+                    if event.key == self.pygame.K_DOWN and self.player.rect.y > 0 and self.player.rect.y < 570:
+                        self.player.rect.y = self.player.rect.y + 5
+                    if event.key == self.pygame.K_LEFT and self.player.rect.x > 0 and self.player.rect.x < 770:
+                        self.player.rect.x = self.player.rect.x - 5
+                    if event.key == self.pygame.K_RIGHT and self.player.rect.x > 0 and self.player.rect.x < 770:
+                        self.player.rect.x = self.player.rect.x + 5
+                        
+                    # Action keys
+                    if event.key == self.pygame.K_SPACE:
+                        # actionHandler needs to be implemented
+                        continue
+                        
+                    # Inveory key 
+                    if event.key == self.pygame.K_i:
+                        # inventoryHandler needs to be implemented which includes spells as well
+                        continue
+                        
+                    # Escape key back to the main menu
+                    if event.key == self.pygame.K_ESCAPE:
+                        self.mainMenu()
+                elif event.type == self.pygame.KEYUP:
+                    continue
+            # Draw character				
+            self.all_sprites_list.draw(self.screen)
+
+            # Update the screen with what we've drawn.
+            self.pygame.display.flip()
+            self.pygame.event.pump()            
+
+    def classSelection(self):
+        while True:            
+            # Draw background
+            self.screen.fill(blue)
+            self.pygame.draw.rect(self.screen,black,[100,100,600,400],2)
+            
+            # Mouse position for debugging
+            mouseCoordinates = self.pygame.mouse.get_pos()
+            mouseFont = self.pygame.font.Font(None, 14)
+            mousePos = mouseFont.render(("MOUSE_POS = (%d,%d)" % mouseCoordinates),True,black)
+            self.screen.blit(mousePos, [10,10]) 
+            
+            titleFont = self.pygame.font.Font(None, 60)
+            titleFont.set_underline(True)
+            title = titleFont.render("Class Selection",True,black)
+            self.screen.blit(title, [240,130])
+            
+            # instructions for choosing a class
+            instructFont = self.pygame.font.Font(None, 20)
+            instructions = instructFont.render("Arrow keys to choose, enter to select",True,black)
+            self.screen.blit(instructions, [280,480])
+            
+            # Draw options
+            optionFont = self.pygame.font.Font(None, 40)
+            optionText = optionFont.render("Wanderer",True,black)
+            self.screen.blit(optionText, [330,300])
+            
+            # Listen for keyboard events
+            for event in self.pygame.event.get():
+                if event.type == self.pygame.KEYDOWN:
+                    if event.key == self.pygame.K_RETURN:
+                        # Initialize the player entity
+                        self.player = player.player("Wanderer", 30, 30)
+                        self.all_sprites_list.add(self.player) # Add the player to the list of objects
+                        self.player.rect.x = 385
+                        self.player.rect.y = 285
+                        self.environment()
+                        
+            # Update the screen with what we've drawn.
+            self.pygame.display.flip()
+            self.pygame.event.pump()
+        
+    def mainInstructionMenu(self):
+        while True:            
+            # Draw background
+            self.screen.fill(blue)
+            self.pygame.draw.rect(self.screen,black,[100,100,600,400],2)
+            
+            # Mouse position for debugging
+            mouseCoordinates = self.pygame.mouse.get_pos()
+            mouseFont = self.pygame.font.Font(None, 14)
+            mousePos = mouseFont.render(("MOUSE_POS = (%d,%d)" % mouseCoordinates),True,black)
+            self.screen.blit(mousePos, [10,10]) 
+            
+            # Draw text
+            instructFont = self.pygame.font.Font(None, 60)
+            instructFont.set_underline(True)
+            instructTitle = instructFont.render("Instructions",True,black)
+            self.screen.blit(instructTitle, [270,130])
+            bodyFont = self.pygame.font.Font(None, 20)
+            body = bodyFont.render("Insert all instructions here",True,black)
+            self.screen.blit(body, [120,200])				
+            
+            # Listen for keyboard events
+            for event in self.pygame.event.get():
+                if event.type == self.pygame.KEYDOWN:
+                    if event.key == self.pygame.K_RETURN or event.key == self.pygame.K_ESCAPE or event.key == self.pygame.K_BACKSPACE:
+                        self.mainMenu()
+                        
+            # Update the screen with what we've drawn.
+            self.pygame.display.flip()
+            self.pygame.event.pump()
+        
+    def mainMenu(self):
+        # Disable key repeat
+        self.pygame.key.set_repeat()
+        
+        # Setup option variables to handle selecting options on main menu
+        optionNum = 1
+        
+        # Initialize coordinate variables for the shield
+        shieldX = 290
+        shieldY = 190
+        
+        while True:
+            # Draw background
+            self.screen.fill(blue)
+            self.pygame.draw.rect(self.screen,black,[100,100,600,400],2)
+            
+            # Mouse position for debugging
+            mouseCoordinates = self.pygame.mouse.get_pos()
+            mouseFont = self.pygame.font.Font(None, 14)
+            mousePos = mouseFont.render(("MOUSE_POS = (%d,%d)" % mouseCoordinates),True,black)
+            self.screen.blit(mousePos, [10,10]) 
+            
+            # Draw background
+            titleFont = self.pygame.font.Font(None, 60)
+            titleFont.set_underline(True)
+            title = titleFont.render("Tyler and Ryan's Game",True,black)
+            self.screen.blit(title, [160,130])
+            optionFont = self.pygame.font.Font(None, 40)
+            option1text = optionFont.render("New Game",True,black)
+            option2text = optionFont.render("Instructions",True,black)
+            option3text = optionFont.render("Exit",True,black)
+            self.screen.blit(option1text, [380,220])
+            self.screen.blit(option2text, [380,300])
+            self.screen.blit(option3text, [380,380])
+        
+            # Draw shield
+            shield = self.pygame.image.load("images/Shield.png")
+            shieldPos = [shieldX, shieldY]
+            self.screen.blit(shield, shieldPos)
+            
+            # Listen for keyboard events
+            for event in self.pygame.event.get():
+                # Moving the shield icon with UP and DOWN arrow keys
+                if event.type == self.pygame.KEYDOWN:
+                    if event.key == self.pygame.K_UP and shieldY > 190:
+                        shieldY = shieldY - 80
+                        optionNum = optionNum - 1
+                    if event.key == self.pygame.K_DOWN and shieldY < 350:
+                        shieldY = shieldY + 80
+                        optionNum = optionNum + 1
+                    # Pressing ENTER to select and option
+                    if event.key == self.pygame.K_RETURN:
+                        if optionNum == 1:
+                            self.classSelection()
+                        elif optionNum == 2:
+                            self.mainInstructionMenu()
+                        elif optionNum == 3:
+                            self.pygame.quit()
+                            exit()
+                            
+            # Update the screen with what we've drawn.
+            self.pygame.display.flip()
+            self.pygame.event.pump()
+        
+if __name__ == "__main__":
+    E = engine()
+    E.mainMenu()

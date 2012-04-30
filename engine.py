@@ -28,12 +28,16 @@ white = (255, 255, 255)
 sand = (255, 230, 160)
 
 # Image variables
+mainMenuImg = pygame.image.load("images/MainMenu.jpg").convert()
+instructMenuImg = pygame.image.load("images/InstructionMenu.jpg").convert()
+classSelectImg = pygame.image.load("images/ClassSelection.jpg").convert()
 healthImg = pygame.image.load("images/small-check.png").convert()
 healthImg.set_colorkey((255,255,255))
 keyImg = pygame.image.load("images/key.png").convert()
 keyImg.set_colorkey((255,255,255))
 chestImg = pygame.image.load("images/chest.png").convert()
 chestImg.set_colorkey((255,255,255))
+
 
 class Item(pygame.sprite.Sprite):
     def __init__ (self, type):
@@ -285,24 +289,13 @@ class engine:
     def classSelection(self):
         while True:            
             # Draw background
-            self.screen.fill(blue)
-            self.pygame.draw.rect(self.screen,black,[100,100,600,400],2)
+            self.screen.blit(classSelectImg, [0,0]) 
             
             # Mouse position for debugging
             mouseCoordinates = self.pygame.mouse.get_pos()
             mouseFont = self.pygame.font.Font(None, 14)
-            mousePos = mouseFont.render(("MOUSE_POS = (%d,%d)" % mouseCoordinates),True,black)
+            mousePos = mouseFont.render(("MOUSE_POS = (%d,%d)" % mouseCoordinates),True,white)
             self.screen.blit(mousePos, [10,10]) 
-            
-            titleFont = self.pygame.font.Font(None, 60)
-            titleFont.set_underline(True)
-            title = titleFont.render("Class Selection",True,black)
-            self.screen.blit(title, [240,130])
-            
-            # instructions for choosing a class
-            instructFont = self.pygame.font.Font(None, 20)
-            instructions = instructFont.render("Arrow keys to choose, enter to select (to be implemented)",True,black)
-            self.screen.blit(instructions, [260,480])
             
             # Draw options
             optionFont = self.pygame.font.Font(None, 40)
@@ -329,23 +322,13 @@ class engine:
     def mainInstructionMenu(self):
         while True:            
             # Draw background
-            self.screen.fill(blue)
-            self.pygame.draw.rect(self.screen,black,[100,100,600,400],2)
+            self.screen.blit(instructMenuImg, [0,0]) 
             
             # Mouse position for debugging
             mouseCoordinates = self.pygame.mouse.get_pos()
             mouseFont = self.pygame.font.Font(None, 14)
-            mousePos = mouseFont.render(("MOUSE_POS = (%d,%d)" % mouseCoordinates),True,black)
+            mousePos = mouseFont.render(("MOUSE_POS = (%d,%d)" % mouseCoordinates),True,white)
             self.screen.blit(mousePos, [10,10]) 
-            
-            # Draw text
-            instructFont = self.pygame.font.Font(None, 60)
-            instructFont.set_underline(True)
-            instructTitle = instructFont.render("Instructions",True,black)
-            self.screen.blit(instructTitle, [270,130])
-            bodyFont = self.pygame.font.Font(None, 20)
-            body = bodyFont.render("Insert all instructions here",True,black)
-            self.screen.blit(body, [120,200])				
             
             # Listen for keyboard events
             for event in self.pygame.event.get():
@@ -365,8 +348,8 @@ class engine:
         optionNum = 1
         
         # Initialize coordinate variables for the shield
-        shieldX = 290
-        shieldY = 190
+        shieldX = 280
+        shieldY = 250
         
         # Reset entities if there are any
         for entity in self.all_sprites_list:
@@ -376,28 +359,14 @@ class engine:
         
         while True:
             # Draw background
-            self.screen.fill(blue)
-            self.pygame.draw.rect(self.screen,black,[100,100,600,400],2)
+            self.screen.blit(mainMenuImg, [0,0]) 
             
             # Mouse position for debugging
             mouseCoordinates = self.pygame.mouse.get_pos()
             mouseFont = self.pygame.font.Font(None, 14)
-            mousePos = mouseFont.render(("MOUSE_POS = (%d,%d)" % mouseCoordinates),True,black)
+            mousePos = mouseFont.render(("MOUSE_POS = (%d,%d)" % mouseCoordinates),True,white)
             self.screen.blit(mousePos, [10,10]) 
             
-            # Draw background
-            titleFont = self.pygame.font.Font(None, 60)
-            titleFont.set_underline(True)
-            title = titleFont.render("Tyler and Ryan's Game",True,black)
-            self.screen.blit(title, [160,130])
-            optionFont = self.pygame.font.Font(None, 40)
-            option1text = optionFont.render("New Game",True,black)
-            option2text = optionFont.render("Instructions",True,black)
-            option3text = optionFont.render("Exit",True,black)
-            self.screen.blit(option1text, [380,220])
-            self.screen.blit(option2text, [380,300])
-            self.screen.blit(option3text, [380,380])
-        
             # Draw shield
             shield = self.pygame.image.load("images/Shield.png")
             shieldPos = [shieldX, shieldY]
@@ -408,10 +377,10 @@ class engine:
                 # Moving the shield icon with UP and DOWN arrow keys
                 if event.type == self.pygame.KEYDOWN:
                     if event.key == self.pygame.K_UP and shieldY > 190:
-                        shieldY = shieldY - 80
+                        shieldY = shieldY - 70
                         optionNum = optionNum - 1
                     if event.key == self.pygame.K_DOWN and shieldY < 350:
-                        shieldY = shieldY + 80
+                        shieldY = shieldY + 70
                         optionNum = optionNum + 1
                     # Pressing ENTER to select and option
                     if event.key == self.pygame.K_RETURN:

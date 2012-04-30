@@ -12,6 +12,8 @@ pygame.init()
 
 # ----- Other libraries we wrote
 import player
+#import weapons
+#import spells
 
 # ----- Import other libraries -----
 import time
@@ -23,15 +25,6 @@ black = (0, 0, 0)
 white = (255, 255, 255)
 sand = (255, 230, 160)
 
-# Enemy entity class
-class enemy(pygame.sprite.Sprite):
-    def __init__(self, type, width, height):
-        self.player = attributes.Attributes(startingClass)
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface([width, height])
-        self.image.fill((0,0,225))    # Change this to an image animation loop later
-        self.rect = self.image.get_rect()
-
 class engine:
     def __init__(self):
         # Initialize the game engine
@@ -41,9 +34,6 @@ class engine:
         size = [800,600]
         self.screen = self.pygame.display.set_mode(size)
         self.pygame.display.set_caption("CS250 Project - Tyler Boraski & Ryan Osbaldeston")
-
-        # Allow buttons to be held down
-        #self.pygame.key.set_repeat(1, 50)
 
         # Initialize object that sets the screen's frame rate
         self.clock = self.pygame.time.Clock()
@@ -61,39 +51,58 @@ class engine:
     
     def environment(self):
         # Allow buttons to be held down
-        self.pygame.key.set_repeat(1, 50)
+        self.pygame.key.set_repeat(1, 25)
+        
+        # Initialize test enemy
+        enemyImage = "images/player-DOWN.png"
+        self.enemy = player.Player("Wytch", enemyImage, 30, 30)
+        self.all_sprites_list.add(self.enemy)   # Add the enemy to the list of objects
+        self.enemy_list.add(self.enemy)         # Add the enemy to the list of enemies
+        self.enemy.rect.x = 200
+        self.enemy.rect.y = 200
+        enemyDirection = "UP"
+        speedCounter = 0
         
         while True:            
             # Draw background
             self.screen.fill(white)
             self.pygame.draw.rect(self.screen,black,[5,5,790,590],0)
+
+            # Draw initial testing environment
+            self.pygame.draw.rect(self.screen,sand,[20,20,760,560],0)
             
             # Mouse position for debugging
             mouseCoordinates = self.pygame.mouse.get_pos()
             mouseFont = self.pygame.font.Font(None, 14)
             mousePos = mouseFont.render(("MOUSE_POS = (%d,%d)" % mouseCoordinates),True,black)
             self.screen.blit(mousePos, [10,10])
-
-            # Draw initial testing environment
-            self.pygame.draw.rect(self.screen,sand,[20,20,760,560],0)
             
-            # Initialize test enemy
-            self.player = player.Player("Wanderer", 30, 30)
-            self.all_sprites_list.add(self.player) # Add the player to the list of objects
-            self.player.rect.x = 385
-            self.player.rect.y = 285
+            if enemyDirection == "UP" and speedCounter % 15 == 0:
+                if self.enemy.rect.y > 100:
+                    self.enemy.rect.y = self.enemy.rect.y - 1
+                else:
+                    enemyDirection = "DOWN"
+            elif enemyDirection == "DOWN" and speedCounter % 15 == 0:
+                if self.enemy.rect.y < 500:
+                    self.enemy.rect.y = self.enemy.rect.y + 1
+                else:
+                    enemyDirection = "UP"
+            speedCounter += 1
+            
+            if speedCounter > 15:
+                speedCounter = 0
             
             # Listen for keyboard events				
             for event in self.pygame.event.get():
                 if event.type == self.pygame.KEYDOWN:
                     # Movement keys
-                    if event.key == self.pygame.K_UP and self.player.rect.y > 0 and self.player.rect.y < 570:
+                    if event.key == self.pygame.K_UP and self.player.rect.y > 20:
                         self.player.rect.y = self.player.rect.y - 5
-                    if event.key == self.pygame.K_DOWN and self.player.rect.y > 0 and self.player.rect.y < 570:
+                    if event.key == self.pygame.K_DOWN and self.player.rect.y < 540:
                         self.player.rect.y = self.player.rect.y + 5
-                    if event.key == self.pygame.K_LEFT and self.player.rect.x > 0 and self.player.rect.x < 770:
+                    if event.key == self.pygame.K_LEFT and self.player.rect.x > 20:
                         self.player.rect.x = self.player.rect.x - 5
-                    if event.key == self.pygame.K_RIGHT and self.player.rect.x > 0 and self.player.rect.x < 770:
+                    if event.key == self.pygame.K_RIGHT and self.player.rect.x < 755:
                         self.player.rect.x = self.player.rect.x + 5
                         
                     # Action keys
@@ -150,7 +159,8 @@ class engine:
                 if event.type == self.pygame.KEYDOWN:
                     if event.key == self.pygame.K_RETURN:
                         # Initialize the player entity
-                        self.player = player.Player("Wanderer", 30, 30)
+                        playerImage = "images/player-DOWN.png"
+                        self.player = player.Player("Wanderer", playerImage, 30, 30)
                         self.all_sprites_list.add(self.player) # Add the player to the list of objects
                         self.player.rect.x = 385
                         self.player.rect.y = 285

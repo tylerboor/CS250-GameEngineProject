@@ -50,7 +50,7 @@ class engine:
         # Setting the frame rate
         self.clock.tick(25)
 
-        # This is a list of 'sprites.' Each entity in the program is
+        # This is a list of 'sprites.' Each enemy in the program is
         # added to this list.
         # The list is managed by a class called 'RenderPlain.'
         self.enemy_list = self.pygame.sprite.RenderPlain()

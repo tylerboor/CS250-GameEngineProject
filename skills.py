@@ -31,29 +31,47 @@ class Skills:
         return active
 
     # Start Archery Block
-    # Archery Weapon Types and Stat Modifiers:
-    #   Short Bow:
-    #   Long Bow:
-    #   Composite Bow:
-    #   Compound Bow:
-    #   Crossbow:
     def initializeArchery(self, withLevel, withSkills):
-        None
+        self.archeryLV = withLevel
+		self.archeryMod = 1
+		self.archerySkills = list()
+		self.archerySkills.append(["Pine", [0], 1, 1, "Ability to wield Iron Bows and Crossbows"])
+		self.archerySkills.append(["Cedar", [25], 0, 1, "Ability to wield Steel Bows and Crossbows"])
+		self.archerySkills.append(["Ebony", [50], 0, 1, "Ability to wield Ebony Bows and Crossbows"])
+		self.archerySkills.append(["Dragon Wing", [75], 0, 1, "Ability to wield Dragon Wing Bows and Crossbows"])
+		self.archerySkills.append(["White Cobalt", [100], 0, 1, "Ability to wield White Cobalt Bows and Crossbows"])
 
     def getArcherySkillLevel(self):
-        None
+		return self.archeryLV
 
-    def getArcheryActivated(self):
-        None
+	def getArcheryActivated(self):
+		active = list()
+		for item in self.archerySkills:
+			if item[3] != 0:
+				active.append(item)
+		return active
 
-    def getArcheryAvailable(self):
-        None
+	def getArcheryAvailable(self):
+		avail = list()
+		for item in self.archerySkills:
+			if item[3] < item[4]:
+				if item[2][item[3]] < self.archeryLV:
+					avail.append(item)
+		return avail
 
-    def getArcheryUnavailable(self):
-        None
+	def getArcheryUnavailable(self):
+		unavail = list()
+		for item in self.archerySkills:
+			if item[3] < item[4]:
+				if item[2][item[3]] > self.archeryLV:
+					unavail.append(item)
+		return unavail
 
-    def activateArcherySkill(self, skill):
-        None
+	def activateArcherySkill(self, Skill):
+		if Skill in self.getArcheryAvailable():
+			for item in self.archerySkills:
+				if item[0] == Skill[0]:
+					item[3] += 1
 	
     def setArcherySkillLevel(self, lv):
             self.archeryLV = lv
@@ -70,22 +88,46 @@ class Skills:
     #   Battle Axe:
     #   Mace:
     def initializeOneHanded(self, withLevel, withSkills):
-        None
+        self.oneHandedLV = withLevel
+		self.oneHandedMod = 1
+		self.oneHandedSkills = list()
+		self.oneHandedSkills.append(["Iron", [0], 1, 1, "Ability to wield Iron One-Handed Weapons"])
+		self.oneHandedSkills.append(["Steel", [25], 0, 1, "Ability to wield Steel One-Handed Weapons"])
+		self.oneHandedSkills.append(["Dragon Bone", [50], 0, 1, "Ability to wield Dragon Bone One-Handed Weapons"])
+		self.oneHandedSkills.append(["Diamond", [75], 0, 1, "Ability to wield Diamond One-Handed Weapons"])
+		self.oneHandedSkills.append(["White Cobalt", [100], 0, 1, "Ability to wield White Cobalt One-Handed Weapons"])
 
     def getOneHandedSkillLevel(self):
-        None
+		return self.oneHandedLV
 
-    def getOneHandedActivated(self):
-        None
+	def getOneHandedActivated(self):
+		active = list()
+		for item in self.oneHandedSkills:
+			if item[3] != 0:
+				active.append(item)
+		return active
 
-    def getOneHandedAvailable(self):
-        None
+	def getOneHandedAvailable(self):
+		avail = list()
+		for item in self.oneHandedSkills:
+			if item[3] < item[4]:
+				if item[2][item[3]] < self.oneHandedLV:
+					avail.append(item)
+		return avail
 
-    def getOneHandedUnavailable(self):
-        None
+	def getOneHandedUnavailable(self):
+		unavail = list()
+		for item in self.oneHandedSkills:
+			if item[3] < item[4]:
+				if item[2][item[3]] > self.oneHandedLV:
+					unavail.append(item)
+		return unavail
 
-    def activateOneHandedSkill(self, skill):
-        None
+	def activateOneHandedSkill(self, power):
+		if power in self.getOneHandedAvailable():
+			for item in self.oneHandedSkills:
+				if item[0] == power[0]:
+					item[3] += 1
 	
     def setOneHandedSkillLevel(self, lv):
             self.oneHandedLV = lv
@@ -102,22 +144,46 @@ class Skills:
     #   Parma:
     #   Scutum:
     def initializeShield(self, withLevel, withSkills):
-        None
+        self.shieldLV = withLevel
+		self.shieldMod = 1
+		self.shieldSkills = list()
+		self.shieldSkills.append(["Iron", [0], 1, 1, "Ability to wield Iron Shields"])
+		self.shieldSkills.append(["Steel", [25], 0, 1, "Ability to wield Steel Shields"])
+		self.shieldSkills.append(["Dragon Bone", [50], 0, 1, "Ability to wield Dragon Bone Shields"])
+		self.shieldSkills.append(["Diamond", [75], 0, 1, "Ability to wield Diamond Shields"])
+		self.shieldSkills.append(["White Cobalt", [100], 0, 1, "Ability to wield White Cobalt Shields"])
 
     def getShieldSkillLevel(self):
-        None
+		return self.shieldLV
 
-    def getShieldActivated(self):
-        None
+	def getShieldActivated(self):
+		active = list()
+		for item in self.shieldSkills:
+			if item[3] != 0:
+				active.append(item)
+		return active
 
-    def getShieldAvailable(self):
-        None
+	def getShieldAvailable(self):
+		avail = list()
+		for item in self.shieldSkills:
+			if item[3] < item[4]:
+				if item[2][item[3]] < self.shieldLV:
+					avail.append(item)
+		return avail
 
-    def getShieldUnavailable(self):
-        None
+	def getShieldUnavailable(self):
+		unavail = list()
+		for item in self.shieldSkills:
+			if item[3] < item[4]:
+				if item[2][item[3]] > self.shieldLV:
+					unavail.append(item)
+		return unavail
 
-    def activateShieldSkill(self, skill):
-        None
+	def activateShieldSkill(self, power):
+		if power in self.getShieldAvailable():
+			for item in self.shieldSkills:
+				if item[0] == power[0]:
+					item[3] += 1
 	
     def setShieldSkillLevel(self, lv):
             self.shieldLV = lv
@@ -134,22 +200,46 @@ class Skills:
     #   Glaives:
     #   Bardiche:
     def initializeStaff(self, withLevel, withSkills):
-        None
+        self.staffLV = withLevel
+		self.staffMod = 1
+		self.staffSkills = list()
+		self.staffSkills.append(["Iron", [0], 1, 1, "Ability to wield Iron Staffs"])
+		self.staffSkills.append(["Steel", [25], 0, 1, "Ability to wield Steel Staffs"])
+		self.staffSkills.append(["Dragon Bone", [50], 0, 1, "Ability to wield Dragon Bone Staffs"])
+		self.staffSkills.append(["Diamond", [75], 0, 1, "Ability to wield Diamond Staffs"])
+		self.staffSkills.append(["White Cobalt", [100], 0, 1, "Ability to wield White Cobalt Staffs"])
     
     def getStaffSkillLevel(self):
-        None
-    
-    def getStaffActivated(self):
-        None
-        
-    def getStaffAvailable(self):
-        None
-    
-    def getStaffUnavailable(self):
-        None
-        
-    def activateStaffSkill(self, skill):
-        None
+		return self.staffLV
+
+	def getStaffActivated(self):
+		active = list()
+		for item in self.staffSkills:
+			if item[3] != 0:
+				active.append(item)
+		return active
+
+	def getStaffAvailable(self):
+		avail = list()
+		for item in self.staffSkills:
+			if item[3] < item[4]:
+				if item[2][item[3]] < self.staffLV:
+					avail.append(item)
+		return avail
+
+	def getStaffUnavailable(self):
+		unavail = list()
+		for item in self.staffSkills:
+			if item[3] < item[4]:
+				if item[2][item[3]] > self.staffLV:
+					unavail.append(item)
+		return unavail
+
+	def activateStaffSkill(self, power):
+		if power in self.getStaffAvailable():
+			for item in self.staffSkills:
+				if item[0] == power[0]:
+					item[3] += 1
 	
     def setStaffSkillLevel(self, lv):
             self.staffLV = lv
@@ -166,22 +256,46 @@ class Skills:
     #   War Hammar:
     #   
     def initializeTwoHanded(self, withLevel, withSkills):
-        None
+        self.twoHandedLV = withLevel
+		self.twoHandedMod = 1
+		self.twoHandedSkills = list()
+		self.twoHandedSkills.append(["Iron", [0], 1, 1, "Ability to wield Iron Two-Handed Weapons"])
+		self.twoHandedSkills.append(["Steel", [25], 0, 1, "Ability to wield Steel Two-Handed Weapons"])
+		self.twoHandedSkills.append(["Dragon Bone", [50], 0, 1, "Ability to wield Dragon Bone Two-Handed Weapons"])
+		self.twoHandedSkills.append(["Diamond", [75], 0, 1, "Ability to wield Diamond Two-Handed Weapons"])
+		self.twoHandedSkills.append(["White Cobalt", [100], 0, 1, "Ability to wield White Cobalt Two-Handed Weapons"])
     
     def getTwoHandedSkillLevel(self):
-        None
-    
-    def getTwoHandedActivated(self):
-        None
-        
-    def getTwoHandedAvailable(self):
-        None
-    
-    def getTwoHandedUnavailable(self):
-        None
-        
-    def activateTwoHandedSkill(self, skill):
-        None
+		return self.twoHandedLV
+
+	def getTwoHandedActivated(self):
+		active = list()
+		for item in self.twoHandedSkills:
+			if item[3] != 0:
+				active.append(item)
+		return active
+
+	def getTwoHandedAvailable(self):
+		avail = list()
+		for item in self.twoHandedSkills:
+			if item[3] < item[4]:
+				if item[2][item[3]] < self.twoHandedLV:
+					avail.append(item)
+		return avail
+
+	def getTwoHandedUnavailable(self):
+		unavail = list()
+		for item in self.twoHandedSkills:
+			if item[3] < item[4]:
+				if item[2][item[3]] > self.twoHandedLV:
+					unavail.append(item)
+		return unavail
+
+	def activateTwoHandedSkill(self, power):
+		if power in self.getTwoHandedAvailable():
+			for item in self.twoHandedSkills:
+				if item[0] == power[0]:
+					item[3] += 1
 	
     def setTwoHandedSkillLevel(self, lv):
             self.twoHandedLV = lv
@@ -192,22 +306,46 @@ class Skills:
     
     # Start Unarmed Block
     def initializeUnarmed(self, withLevel, withSkills):
-        None
+        self.unarmedLV = withLevel
+		self.unarmedMod = 1
+		self.unarmedSkills = list()
+		self.unarmedSkills.append(["Iron", [0], 1, 1, "Ability to wield Iron Unarmed Weapons"])
+		self.unarmedSkills.append(["Steel", [25], 0, 1, "Ability to wield Steel Unarmed Weapons"])
+		self.unarmedSkills.append(["Dragon Bone", [50], 0, 1, "Ability to wield Dragon Bone Unarmed Weapons"])
+		self.unarmedSkills.append(["Diamond", [75], 0, 1, "Ability to wield Diamond Unarmed Weapons"])
+		self.unarmedSkills.append(["White Cobalt", [100], 0, 1, "Ability to wield White Cobalt Unarmed Weapons"])
     
     def getUnarmedSkillLevel(self):
-        None
-    
-    def getUnarmedActivated(self):
-        None
-        
-    def getUnarmedAvailable(self):
-        None
-    
-    def getUnarmedUnavailable(self):
-        None
-        
-    def activateUnarmedSkill(self, skill):
-        None
+		return self.unarmedLV
+
+	def getUnarmedActivated(self):
+		active = list()
+		for item in self.unarmedSkills:
+			if item[3] != 0:
+				active.append(item)
+		return active
+
+	def getUnarmedAvailable(self):
+		avail = list()
+		for item in self.unarmedSkills:
+			if item[3] < item[4]:
+				if item[2][item[3]] < self.unarmedLV:
+					avail.append(item)
+		return avail
+
+	def getUnarmedUnavailable(self):
+		unavail = list()
+		for item in self.unarmedSkills:
+			if item[3] < item[4]:
+				if item[2][item[3]] > self.unarmedLV:
+					unavail.append(item)
+		return unavail
+
+	def activateUnarmedSkill(self, power):
+		if power in self.getUnarmedAvailable():
+			for item in self.unarmedSkills:
+				if item[0] == power[0]:
+					item[3] += 1
 	
     def setUnarmedSkillLevel(self, lv):
             self.unarmedLV = lv
